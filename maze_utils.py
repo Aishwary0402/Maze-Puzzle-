@@ -1,14 +1,22 @@
 import numpy as np
 import random
 import heapq
+from. import dijkstra 
 
-def generate_random_maze(rows=10, cols=10, wall_prob=0.3, seed=None):
-    if seed is not None:
-        np.random.seed(seed)
-        random.seed(seed)
-    maze = (np.random.rand(rows, cols) < wall_prob).astype(int)
-    maze[0, 0] = 0
-    maze[rows - 1, cols - 1] = 0
+def generate_random_maze(rows=10, cols=10, wall_prob=0.3, max_attempts=50):
+    """Generate a random solvable maze using retries."""
+    for _ in range(max_attempts):
+        maze = (np.random.rand(rows, cols) < wall_prob).astype(int)
+        maze[0, 0] = 0
+        maze[rows - 1, cols - 1] = 0
+
+        # Check solvability using Dijkstra
+        path = dijkstra(maze, (0, 0), (rows - 1, cols - 1))
+        if len(path) > 1:
+            return maze  # ✅ solvable maze found
+
+    # If no solvable maze found after all attempts, relax constraints
+    print("⚠️ Could not find a solvable maze, returning last attempt.")
     return maze
 
 def dijkstra(maze, start, goal):
