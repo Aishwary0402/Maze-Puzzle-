@@ -1,7 +1,6 @@
 import numpy as np
 import random
 import heapq
-from. import dijkstra 
 
 def generate_random_maze(rows=10, cols=10, wall_prob=0.3, max_attempts=50):
     """Generate a random solvable maze using retries."""
